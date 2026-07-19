@@ -1,0 +1,121 @@
+[build-system]
+requires = ["hatchling>=1.27", "hatch-vcs>=0.5"]
+build-backend = "hatchling.build"
+
+[project]
+name = "codex-fastapi-cabinet"
+dynamic = ["version"]
+description = "Composable administration interfaces for FastAPI sites and APIs"
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { text = "Apache-2.0" }
+requires-python = ">=3.12"
+authors = [{ name = "CodexDLC" }]
+keywords = ["fastapi", "admin", "dashboard", "jinja2", "management"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+dependencies = [
+    "fastapi>=0.115,<1.0",
+    "jinja2>=3.1,<4.0",
+    "pydantic>=2.10,<3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/CodexDLC/codex-fastapi-cabinet"
+Documentation = "https://codexdlc.github.io/codex-fastapi-cabinet/"
+Repository = "https://github.com/CodexDLC/codex-fastapi-cabinet"
+Issues = "https://github.com/CodexDLC/codex-fastapi-cabinet/issues"
+
+[project.optional-dependencies]
+dev = [
+    "httpx>=0.28",
+    "mypy>=1.15",
+    "pip-audit>=2.7",
+    "pre-commit>=4.0",
+    "pytest>=9.0",
+    "pytest-asyncio>=1.0",
+    "pytest-cov>=6.0",
+    "ruff>=0.11",
+]
+docs = [
+    "mike>=2.1",
+    "mkdocs>=1.6,<2.0",
+    "mkdocs-include-markdown-plugin>=7.1",
+    "mkdocs-material>=9.6",
+    "mkdocstrings[python]>=0.29",
+]
+
+[tool.hatch.version]
+source = "vcs"
+raw-options = { fallback_version = "0.1.0.dev0", version_scheme = "guess-next-dev", local_scheme = "no-local-version" }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fastapi_cabinet"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/CHANGELOG.md",
+    "/LICENSE",
+    "/README.md",
+    "/docs",
+    "/examples",
+    "/mkdocs.yml",
+    "/pyproject.toml",
+    "/src",
+    "/tests",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C4", "SIM", "TCH"]
+ignore = ["B008"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "--cov=src/fastapi_cabinet --cov-report=term-missing"
+markers = [
+    "unit: isolated tests without external services",
+    "integration: FastAPI and package integration tests",
+]
+
+[tool.coverage.run]
+source = ["src/fastapi_cabinet"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101"]
+
+[tool.codex-check]
+project-name = "codex-fastapi-cabinet"
+test-stages = ["unit", "integration"]
+test-paths = ["tests"]
+types-paths = ["src"]

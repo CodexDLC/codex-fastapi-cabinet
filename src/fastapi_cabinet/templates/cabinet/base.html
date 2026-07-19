@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ layout.title }} · {{ layout.brand_name }}</title>
+    <link rel="stylesheet" href="{{ layout.static_mount_path }}/css/cabinet.css?v={{ layout.static_version }}">
+</head>
+<body>
+    <div class="fc-shell">
+        {% include "cabinet/includes/topbar.html" %}
+        <div class="fc-workspace">
+            {% include "cabinet/includes/sidebar.html" %}
+            <main class="fc-main" id="main-content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+    <script src="{{ layout.static_mount_path }}/js/cabinet.js?v={{ layout.static_version }}" defer></script>
+</body>
+</html>

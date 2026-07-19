@@ -1,0 +1,8 @@
+<h2 class="fc-card-title">{{ widget.title }}</h2>
+{% if widget.items %}
+    <ul class="fc-list">
+        {% for item in widget.items %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+{% else %}
+    <p class="fc-empty">{{ widget.empty_message }}</p>
+{% endif %}

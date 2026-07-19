@@ -1,0 +1,9 @@
+<div class="fc-metric">
+    <div>
+        <p class="fc-card-title">{{ widget.title }}</p>
+        <p class="fc-metric-value">{{ widget.value }}</p>
+    </div>
+    {% if widget.icon %}<span class="fc-metric-icon" aria-hidden="true">{{ widget.icon }}</span>{% endif %}
+</div>
+{% if widget.subtitle %}<p class="fc-muted">{{ widget.subtitle }}</p>{% endif %}
+{% if widget.trend %}<p class="fc-trend">{{ widget.trend }}</p>{% endif %}

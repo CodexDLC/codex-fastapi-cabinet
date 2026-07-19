@@ -1,0 +1,42 @@
+site_name: codex-fastapi-cabinet
+site_description: Composable administration interfaces for FastAPI sites and APIs
+site_url: https://codexdlc.github.io/codex-fastapi-cabinet/
+repo_url: https://github.com/CodexDLC/codex-fastapi-cabinet
+repo_name: CodexDLC/codex-fastapi-cabinet
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.sections
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: false
+            show_root_heading: true
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+
+nav:
+  - English:
+      - Overview: index.md
+      - Getting started: getting-started.md
+      - Architecture: architecture.md
+      - Customization and security: customization.md
+      - API reference: reference.md
+  - Русский:
+      - Обзор: ru/index.md
+      - Быстрый старт: ru/getting-started.md
+      - Архитектура: ru/architecture.md
+      - Настройка и безопасность: ru/customization.md

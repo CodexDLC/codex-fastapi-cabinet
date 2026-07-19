@@ -1,0 +1,18 @@
+{% extends "cabinet/base.html" %}
+{% block content %}
+<header class="fc-page-header">
+    <div>
+        <p class="fc-eyebrow">Module</p>
+        <h1>{{ module.label }}</h1>
+    </div>
+</header>
+{% if widgets %}
+    <div class="fc-widget-grid">
+        {% for widget in widgets %}
+            {% include "cabinet/includes/widget_frame.html" %}
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="fc-empty">This module has no dashboard widgets yet.</div>
+{% endif %}
+{% endblock %}

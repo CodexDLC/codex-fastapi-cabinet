@@ -1,0 +1,39 @@
+{% extends "cabinet/base.html" %}
+{% block content %}
+<header class="fc-page-header">
+    <div>
+        <p class="fc-eyebrow">{{ module.label }}</p>
+        <h1>{{ page.title }}</h1>
+        {% if page.subtitle %}<p class="fc-muted">{{ page.subtitle }}</p>{% endif %}
+    </div>
+    <div class="fc-actions">
+        {% for action in page.actions %}<a class="fc-button {{ action.css_class }}" href="{{ action.url }}">{{ action.label }}</a>{% endfor %}
+    </div>
+</header>
+{% if page.back_url %}<p><a href="{{ page.back_url }}">← Back</a></p>{% endif %}
+{% if page.fields %}
+<section class="fc-card">
+    <dl class="fc-details">
+        {% for field in page.fields %}
+        <div>
+            <dt>{{ field.label }}</dt>
+            <dd>{{ field.value }}</dd>
+        </div>
+        {% endfor %}
+    </dl>
+</section>
+{% endif %}
+{% for section in page.sections %}
+<section class="fc-card">
+    <h2 class="fc-card-title">{{ section.title }}</h2>
+    <dl class="fc-details">
+        {% for field in section.fields %}
+        <div>
+            <dt>{{ field.label }}</dt>
+            <dd>{{ field.value }}</dd>
+        </div>
+        {% endfor %}
+    </dl>
+</section>
+{% endfor %}
+{% endblock %}

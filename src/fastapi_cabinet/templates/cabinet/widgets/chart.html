@@ -1,0 +1,20 @@
+<h2 class="fc-card-title">{{ widget.title }}</h2>
+<div class="fc-chart" data-chart-type="{{ widget.chart_type }}" style="min-height: {{ widget.height }}px">
+    {% if widget.datasets and widget.labels %}
+        {% for dataset in widget.datasets %}
+            <section class="fc-chart-series">
+                <h3>{{ dataset.label }}</h3>
+                <dl>
+                    {% for value in dataset.data %}
+                        <div class="fc-chart-point">
+                            <dt>{{ widget.labels[loop.index0] if loop.index0 < widget.labels|length else loop.index }}</dt>
+                            <dd style="--fc-value: {{ value }}">{{ value }}</dd>
+                        </div>
+                    {% endfor %}
+                </dl>
+            </section>
+        {% endfor %}
+    {% else %}
+        <p class="fc-empty">No chart data.</p>
+    {% endif %}
+</div>

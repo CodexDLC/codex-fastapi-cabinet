@@ -1,0 +1,14 @@
+{% extends "cabinet/base.html" %}
+{% block content %}
+<header class="fc-page-header">
+    <div>
+        <p class="fc-eyebrow">Management</p>
+        <h1>{{ layout.title }}</h1>
+    </div>
+</header>
+{% if modules %}
+    <div class="fc-empty">Choose a management module.</div>
+{% else %}
+    <div class="fc-empty">No management modules are available.</div>
+{% endif %}
+{% endblock %}

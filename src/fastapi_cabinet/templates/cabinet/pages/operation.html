@@ -1,0 +1,29 @@
+{% extends "cabinet/base.html" %}
+{% block content %}
+<header class="fc-page-header">
+    <div>
+        <p class="fc-eyebrow">{{ module.label }}</p>
+        <h1>{{ page.title }}</h1>
+        {% if page.subtitle %}<p class="fc-muted">{{ page.subtitle }}</p>{% endif %}
+    </div>
+</header>
+{% if page.description %}<p>{{ page.description }}</p>{% endif %}
+{% for notice in page.notices %}<div class="fc-alert">{{ notice }}</div>{% endfor %}
+<div class="fc-operation-grid">
+    {% for action in page.actions %}
+    <section class="fc-card">
+        <h2 class="fc-card-title">{{ action.label }}</h2>
+        {% if action.description %}<p>{{ action.description }}</p>{% endif %}
+        <form action="{{ action.action_url }}" method="post">
+            <input type="hidden" name="_method" value="{{ action.method }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button
+                class="fc-button {{ action.css_class }}"
+                type="submit"
+                {% if action.confirmation %}data-confirm="{{ action.confirmation }}"{% endif %}
+            >{{ action.label }}</button>
+        </form>
+    </section>
+    {% endfor %}
+</div>
+{% endblock %}

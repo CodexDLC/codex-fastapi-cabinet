@@ -1,0 +1,81 @@
+{% extends "cabinet/base.html" %}
+{% block content %}
+<header class="fc-page-header">
+    <div>
+        <p class="fc-eyebrow">{{ module.label }}</p>
+        <h1>{{ page.title }}</h1>
+        {% if page.subtitle %}<p class="fc-muted">{{ page.subtitle }}</p>{% endif %}
+    </div>
+    {% if page.create_url %}<a class="fc-button is-primary" href="{{ page.create_url }}">{{ page.create_label }}</a>{% endif %}
+</header>
+{% if page.filters %}
+<form class="fc-card fc-filters" method="get">
+    {% for field in page.filters %}
+        <label>
+            <span>{{ field.label }}</span>
+            {% if field.input_type == "select" %}
+                <select name="{{ field.name }}">
+                    {% for choice in field.choices %}
+                        <option value="{{ choice.value }}"{% if choice.selected %} selected{% endif %}>{{ choice.label }}</option>
+                    {% endfor %}
+                </select>
+            {% elif field.input_type == "checkbox" %}
+                <input type="checkbox" name="{{ field.name }}" value="1"{% if field.value %} checked{% endif %}>
+            {% else %}
+                <input type="{{ field.input_type }}" name="{{ field.name }}" value="{{ field.value }}">
+            {% endif %}
+        </label>
+    {% endfor %}
+    <button class="fc-button" type="submit">Filter</button>
+</form>
+{% endif %}
+<section class="fc-card">
+    {% if page.rows %}
+    <div class="fc-table-wrap">
+        <table class="fc-table">
+            <thead>
+                <tr>
+                    {% for column in page.columns %}<th class="is-{{ column.align }}">{{ column.label }}</th>{% endfor %}
+                    {% if page.actions %}<th>Actions</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in page.rows %}
+                <tr>
+                    {% for column in page.columns %}
+                    <td class="is-{{ column.align }}">
+                        {% if page.row_href_key and row.get(page.row_href_key) %}
+                            <a href="{{ row.get(page.row_href_key) }}">{{ row.get(column.key, "") }}</a>
+                        {% else %}
+                            {{ row.get(column.key, "") }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                    {% if page.actions %}
+                    <td class="fc-actions">
+                        {% for action in page.actions %}
+                        <form action="{{ action.action_url }}" method="post">
+                            <input type="hidden" name="_method" value="{{ action.method }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <button class="fc-button {{ action.css_class }}" type="submit">{{ action.label }}</button>
+                        </form>
+                        {% endfor %}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="fc-empty">{{ page.empty_message }}</p>
+    {% endif %}
+</section>
+{% if page.pagination %}
+<nav class="fc-pagination" aria-label="Pagination">
+    {% if page.pagination.previous_url %}<a class="fc-button" href="{{ page.pagination.previous_url }}">Previous</a>{% endif %}
+    <span>Page {{ page.pagination.page }} of {{ page.pagination.pages }} · {{ page.pagination.total }} total</span>
+    {% if page.pagination.next_url %}<a class="fc-button" href="{{ page.pagination.next_url }}">Next</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

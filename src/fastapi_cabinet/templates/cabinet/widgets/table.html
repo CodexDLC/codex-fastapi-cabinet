@@ -1,0 +1,43 @@
+<h2 class="fc-card-title">{{ widget.title }}</h2>
+{% if widget.rows %}
+<div class="fc-table-wrap">
+    <table class="fc-table">
+        <thead>
+            <tr>
+                {% for column in widget.columns %}
+                    <th class="is-{{ column.align }}">{{ column.label }}</th>
+                {% endfor %}
+                {% if widget.actions %}<th>Actions</th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in widget.rows %}
+                <tr>
+                    {% for column in widget.columns %}
+                        <td class="is-{{ column.align }}">
+                            {% if widget.row_href_key and row.get(widget.row_href_key) %}
+                                <a href="{{ row.get(widget.row_href_key) }}">{{ row.get(column.key, "") }}</a>
+                            {% else %}
+                                {{ row.get(column.key, "") }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    {% if widget.actions %}
+                        <td class="fc-actions">
+                            {% for action in widget.actions %}
+                                <form action="{{ action.action_url }}" method="post">
+                                    <input type="hidden" name="_method" value="{{ action.method }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button class="fc-button {{ action.css_class }}" type="submit">{{ action.label }}</button>
+                                </form>
+                            {% endfor %}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <p class="fc-empty">{{ widget.empty_message }}</p>
+{% endif %}

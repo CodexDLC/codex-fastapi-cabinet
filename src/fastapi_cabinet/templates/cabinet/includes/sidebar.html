@@ -1,0 +1,20 @@
+{% if layout.sidebar %}
+<aside class="fc-sidebar" aria-label="Module navigation">
+    <nav>
+        {% for item in layout.sidebar %}
+            <a
+                class="fc-sidebar-link{% if layout.active_path == item.path %} is-active{% endif %}"
+                href="{{ item.path }}"
+            >
+                <span>
+                    {% if item.icon %}<span aria-hidden="true">{{ item.icon }}</span>{% endif %}
+                    {{ item.label }}
+                </span>
+                {% if item.badge_key and item.badge_key in layout.sidebar_badges %}
+                    <span class="fc-badge">{{ layout.sidebar_badges[item.badge_key] }}</span>
+                {% endif %}
+            </a>
+        {% endfor %}
+    </nav>
+</aside>
+{% endif %}
