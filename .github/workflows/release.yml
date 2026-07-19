@@ -1,0 +1,144 @@
+name: Release to PyPI
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Verify and build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the tagged source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Validate the release tag
+        id: release
+        shell: bash
+        run: |
+          if [[ ! "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Release tag must use the vMAJOR.MINOR.PATCH format." >&2
+            exit 1
+          fi
+          git fetch origin main --no-tags
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" "origin/main"; then
+            echo "Release tag must point to a commit contained in origin/main." >&2
+            exit 1
+          fi
+          echo "version=${GITHUB_REF_NAME#v}" >> "${GITHUB_OUTPUT}"
+
+      - name: Install locked development dependencies
+        run: uv sync --frozen --extra dev --extra docs
+
+      - name: Run quality gates
+        run: |
+          uv run --frozen ruff check src tests examples
+          uv run --frozen mypy src tests examples
+          uv run --frozen pytest
+          uv run --frozen mkdocs build --strict
+
+      - name: Build wheel and source distribution
+        run: uv build
+
+      - name: Verify distribution identity and metadata
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          expected_wheel="dist/codex_fastapi_cabinet-${RELEASE_VERSION}-py3-none-any.whl"
+          expected_sdist="dist/codex_fastapi_cabinet-${RELEASE_VERSION}.tar.gz"
+          mapfile -t distributions < <(find dist -maxdepth 1 -type f -print | sort)
+          if [[ "${#distributions[@]}" -ne 2 ]]; then
+            printf 'Expected exactly two distributions, found:\n%s\n' "${distributions[*]}" >&2
+            exit 1
+          fi
+          test -f "${expected_wheel}"
+          test -f "${expected_sdist}"
+          uv run --frozen twine check "${expected_wheel}" "${expected_sdist}"
+          sha256sum "${expected_wheel}" "${expected_sdist}" | tee -a "${GITHUB_STEP_SUMMARY}"
+
+      - name: Smoke-test the built wheel
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          smoke_dir="${RUNNER_TEMP}/cabinet-wheel-smoke"
+          uv venv "${smoke_dir}" --python 3.12
+          uv pip install --python "${smoke_dir}/bin/python" \
+            "dist/codex_fastapi_cabinet-${RELEASE_VERSION}-py3-none-any.whl"
+          "${smoke_dir}/bin/python" - <<'PY'
+          from importlib.resources import files
+
+          import fastapi_cabinet
+
+          package = files("fastapi_cabinet")
+          assert (package / "templates/cabinet/base.html").is_file()
+          assert (package / "static/css/cabinet.css").is_file()
+          assert fastapi_cabinet.CabinetSite
+          print("Installed wheel smoke-test passed.")
+          PY
+
+      - name: Preserve verified distributions
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: python-package-distributions
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
+          if-no-files-found: error
+          retention-days: 14
+
+  attest:
+    name: Attest distributions
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Download verified distributions
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: python-package-distributions
+          path: dist
+
+      - name: Generate build provenance
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: "dist/*"
+
+  publish:
+    name: Publish distributions
+    needs: [build, attest]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/codex-fastapi-cabinet
+    permissions:
+      id-token: write
+    steps:
+      - name: Download verified distributions
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: python-package-distributions
+          path: dist
+
+      - name: Publish to PyPI through Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
