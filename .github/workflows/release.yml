@@ -63,7 +63,11 @@ jobs:
         run: |
           expected_wheel="dist/codex_fastapi_cabinet-${RELEASE_VERSION}-py3-none-any.whl"
           expected_sdist="dist/codex_fastapi_cabinet-${RELEASE_VERSION}.tar.gz"
-          mapfile -t distributions < <(find dist -maxdepth 1 -type f -print | sort)
+          mapfile -t distributions < <(
+            find dist -maxdepth 1 -type f \
+              \( -name '*.whl' -o -name '*.tar.gz' \) \
+              -print | sort
+          )
           if [[ "${#distributions[@]}" -ne 2 ]]; then
             printf 'Expected exactly two distributions, found:\n%s\n' "${distributions[*]}" >&2
             exit 1
