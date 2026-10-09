@@ -87,14 +87,32 @@ jobs:
           uv pip install --python "${smoke_dir}/bin/python" \
             "dist/codex_fastapi_cabinet-${RELEASE_VERSION}-py3-none-any.whl"
           "${smoke_dir}/bin/python" - <<'PY'
+          import subprocess
+          import sys
           from importlib.resources import files
+          from pathlib import Path
+          from tempfile import TemporaryDirectory
 
           import fastapi_cabinet
 
           package = files("fastapi_cabinet")
           assert (package / "templates/cabinet/base.html").is_file()
           assert (package / "static/css/cabinet.css").is_file()
+          assert (package / "agent_skills/resources/SKILL.md").is_file()
           assert fastapi_cabinet.CabinetSite
+          with TemporaryDirectory() as directory:
+              project = Path(directory)
+              instructions = b"# Consumer instructions\n\nKeep application rules here.\n"
+              (project / "AGENTS.md").write_bytes(instructions)
+              for command in ("install", "status", "update", "status", "delete"):
+                  subprocess.run(
+                      [sys.executable, "-m", "fastapi_cabinet.agent_skills", command,
+                       "--project", str(project)],
+                      cwd=project,
+                      check=True,
+                  )
+              assert (project / "AGENTS.md").read_bytes() == instructions
+              assert not (project / ".agents/skills/codex-fastapi-cabinet/SKILL.md").exists()
           print("Installed wheel smoke-test passed.")
           PY
 

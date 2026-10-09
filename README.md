@@ -125,6 +125,7 @@ enforced outside the library.
 - [Русская документация](docs/ru/index.md)
 - [Architecture and extension boundaries](docs/architecture.md)
 - [Template customization](docs/customization.md)
+- [Optional offline agent skill](docs/agent-skills.md)
 
 ## Development
 

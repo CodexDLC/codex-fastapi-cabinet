@@ -7,6 +7,14 @@ uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-09
+
+### Added
+
+- Optional offline agent skill and `install`/`update`/`delete`/`status` commands for consuming FastAPI projects.
+- Project maintainer guidance and English/Russian skill installation documentation.
+- Installer ownership, rollback, recovery-backup, and symlink protection tests, plus a release wheel lifecycle check.
+
 ## [0.1.0] - 2026-07-19
 
 ### Added

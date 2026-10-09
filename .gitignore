@@ -11,3 +11,4 @@ build/
 dist/
 htmlcov/
 site/
+graphify-out/

@@ -34,9 +34,11 @@ nav:
       - Getting started: getting-started.md
       - Architecture: architecture.md
       - Customization and security: customization.md
+      - Agent skill: agent-skills.md
       - API reference: reference.md
   - Русский:
       - Обзор: ru/index.md
       - Быстрый старт: ru/getting-started.md
       - Архитектура: ru/architecture.md
       - Настройка и безопасность: ru/customization.md
+      - Навык агента: ru/agent-skills.md
