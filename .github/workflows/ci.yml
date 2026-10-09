@@ -19,3 +19,4 @@ jobs:
       - run: uv run mypy src tests examples
       - run: uv run pytest
       - run: uv build
+      - run: uv run --frozen twine check dist/*.whl dist/*.tar.gz

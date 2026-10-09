@@ -15,6 +15,10 @@ uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Project maintainer guidance and English/Russian skill installation documentation.
 - Installer ownership, rollback, recovery-backup, and symlink protection tests, plus a release wheel lifecycle check.
 
+### Fixed
+
+- Use core metadata 2.4 for distributions to remain compatible with the locked release validation tools.
+
 ## [0.1.0] - 2026-07-19
 
 ### Added

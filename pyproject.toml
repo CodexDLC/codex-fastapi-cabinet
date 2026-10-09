@@ -58,9 +58,11 @@ source = "vcs"
 raw-options = { fallback_version = "0.1.0.dev0", version_scheme = "guess-next-dev", local_scheme = "no-local-version" }
 
 [tool.hatch.build.targets.wheel]
+core-metadata-version = "2.4"
 packages = ["src/fastapi_cabinet"]
 
 [tool.hatch.build.targets.sdist]
+core-metadata-version = "2.4"
 include = [
     "/CHANGELOG.md",
     "/LICENSE",
