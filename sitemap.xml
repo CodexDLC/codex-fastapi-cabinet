@@ -2,38 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://codexdlc.github.io/codex-fastapi-cabinet/</loc>
-         <lastmod>2026-07-19</lastmod>
+         <lastmod>2026-10-09</lastmod>
+    </url>
+    <url>
+         <loc>https://codexdlc.github.io/codex-fastapi-cabinet/agent-skills/</loc>
+         <lastmod>2026-10-09</lastmod>
     </url>
     <url>
          <loc>https://codexdlc.github.io/codex-fastapi-cabinet/architecture/</loc>
-         <lastmod>2026-07-19</lastmod>
+         <lastmod>2026-10-09</lastmod>
     </url>
     <url>
          <loc>https://codexdlc.github.io/codex-fastapi-cabinet/customization/</loc>
-         <lastmod>2026-07-19</lastmod>
+         <lastmod>2026-10-09</lastmod>
     </url>
     <url>
          <loc>https://codexdlc.github.io/codex-fastapi-cabinet/getting-started/</loc>
-         <lastmod>2026-07-19</lastmod>
+         <lastmod>2026-10-09</lastmod>
     </url>
     <url>
          <loc>https://codexdlc.github.io/codex-fastapi-cabinet/reference/</loc>
-         <lastmod>2026-07-19</lastmod>
+         <lastmod>2026-10-09</lastmod>
     </url>
     <url>
          <loc>https://codexdlc.github.io/codex-fastapi-cabinet/ru/</loc>
-         <lastmod>2026-07-19</lastmod>
+         <lastmod>2026-10-09</lastmod>
+    </url>
+    <url>
+         <loc>https://codexdlc.github.io/codex-fastapi-cabinet/ru/agent-skills/</loc>
+         <lastmod>2026-10-09</lastmod>
     </url>
     <url>
          <loc>https://codexdlc.github.io/codex-fastapi-cabinet/ru/architecture/</loc>
-         <lastmod>2026-07-19</lastmod>
+         <lastmod>2026-10-09</lastmod>
     </url>
     <url>
          <loc>https://codexdlc.github.io/codex-fastapi-cabinet/ru/customization/</loc>
-         <lastmod>2026-07-19</lastmod>
+         <lastmod>2026-10-09</lastmod>
     </url>
     <url>
          <loc>https://codexdlc.github.io/codex-fastapi-cabinet/ru/getting-started/</loc>
-         <lastmod>2026-07-19</lastmod>
+         <lastmod>2026-10-09</lastmod>
     </url>
 </urlset>
